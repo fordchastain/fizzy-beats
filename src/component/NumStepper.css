@@ -1,0 +1,29 @@
+.component-num-stepper {
+  
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button
+{
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number]
+{
+  -moz-appearance: textfield;
+}
+
+.component-num-stepper input {
+  width: 45px;
+  height: 42px;
+  line-height: 1.65;
+  padding: 0;
+  margin: 0;
+  padding-left: 20px;
+  border: 1px solid #eee;
+}
+
+.component-num-stepper input:focus {
+  outline: 0;
+}
