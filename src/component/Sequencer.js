@@ -3,10 +3,12 @@ import ButtonPanel from "./ButtonPanel"
 import fizzyBeats from "../logic/fizzyBeats";
 import NumStepper from "./NumStepper"
 import powerIcon from "./assets/power.png"
-import "./App.css";
+import "./Sequencer.css";
 
 
-export default class App extends React.Component {
+export default class Sequencer extends React.Component {
+
+  beats = [];
 
   handleInput = (value) => {
     console.log(value);
@@ -15,6 +17,16 @@ export default class App extends React.Component {
   sequenceButtonHandler = (row, col, selected) => {
     let btnInfo = {row: row, col: col, selected: selected};
     console.log(btnInfo);
+    if (selected) {
+      this.beats.push([row, col]);
+    }
+    else {
+      for (var i = 0; i < this.beats.length; i++) {
+        if (this.beats[i][0] === row && this.beats[i][1] === col) {
+          this.beats.splice(i, 1);
+        }
+      }
+    }
   }
 
   render() {
