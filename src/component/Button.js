@@ -4,27 +4,23 @@ import "./Button.css";
 
 export default class Button extends React.Component {
   static propTypes = {
-    clickHandler: PropTypes.func,
-    selected: PropTypes.bool,
-    sequenceButton: PropTypes.bool,
     rowNumber: PropTypes.number,
     colNumber: PropTypes.number
   };
 
-  handleClick = () => {
-    if (!this.sequenceButton) {
+  state = {selected: false};
 
-    }
-    else {
-      this.selected = !this.selected;
+  handleClick = () => {
+    if (this.props.colNumber!=0) {
+      this.setState({selected: !this.state.selected});
     }
   };
 
   render() {
     const className = [
       "component-button",
-      this.props.sequenceButton ? "sequence" : "",
-      this.props.selected ? "selected" : ""
+      this.props.colNumber==0 ? "sequence" : "",
+      this.state.selected ? "selected" : ""
     ];
 
     return (
