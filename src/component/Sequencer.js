@@ -2,7 +2,7 @@ import React from "react";
 import ButtonPanel from "./ButtonPanel"
 import NumStepper from "./NumStepper"
 import powerIcon from "./assets/power.png"
-import presets from "./drumKits.json"
+import presets from "./presets.json"
 import "./Sequencer.css";
 
 
@@ -79,11 +79,25 @@ export default class Sequencer extends React.Component {
 
   }
 
+  togglePad = (row, col) => {
+    this.setState(state => ({
+      ...state,
+      pads: state.pads.map((r, i) => r.map((c, j) => {
+        if (i === row && j === col) {
+          return (c === 0 ? 1 : 0);
+        }
+        else {
+          return c;
+        }
+      }))
+    }));
+  }
+
   handleInput = (value) => {
     console.log("bpm changed to " + value);
   }
 
-  sequenceButtonHandler = (row, col, selected) => {
+  sequenceButtonHandler = (row, col) => {
     if (this.audioContext === 'suspended') {
       this.audioContext.resume();
     }
@@ -92,19 +106,8 @@ export default class Sequencer extends React.Component {
       this.playSample(this.state.samples[row], 0);
     }
     else {
-      console.log("sequence button at row " + row + " col " + col + (selected ? " selected" : " deslected"));
-      if (selected) {
-        this.setState({beats: [ ...this.state.beats, [row,col] ]});
-      }
-      else {
-        let beatsCopy = [...this.state.beats];
-        for (var i = 0; i < beatsCopy.length; i++) {
-          if (beatsCopy[i][0] === row && beatsCopy[i][1] === col) {
-            beatsCopy.splice(i, 1);
-            this.setState({beats: beatsCopy});
-          }
-        }
-      }
+      console.log("sequence button at row " + row + " col pushed");
+      this.togglePad(row, col-1); // use col-1 since first button isn't a sequence button
     }
   }
 
