@@ -1,9 +1,0 @@
-.component-button-panel {
-
-}
-
-.component-button-panel > div {
-  display: grid;
-  grid-template-columns: repeat(9, 64px);
-  grid-auto-rows: 65px;
-}

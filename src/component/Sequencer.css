@@ -29,4 +29,11 @@
   left: 50%;
   -ms-transform: translate(-50%, 0);
   transform: translate(-50%, 0);
+  outline: none;
+}
+
+.button-panel > div {
+  display: grid;
+  grid-template-columns: repeat(9, 64px);
+  grid-auto-rows: 65px;
 }

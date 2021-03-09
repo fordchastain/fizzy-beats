@@ -26,6 +26,10 @@
   background: linear-gradient(to right, #00e1ff 0%, #00cbe6 51%, #009eb3 100%);
 }
 
+.component-button.playing button {
+  background-position: right center;
+}
+
 .component-button button:active, .component-button button:focus {
   outline: 0;
   -moz-outline-style: none;
