@@ -16,18 +16,25 @@
   height: 100%;
 }
 
-.component-button.sequence button {
-  background-color: #e9bcb7;
-  background-image: linear-gradient(to right, #e9bcb7 0%, #29524a 74%);
+.component-button.sample button {
+  background: rgb(224,158,254);
+  background: linear-gradient(90deg, rgba(224,158,254,1) 0%, rgba(195,82,235,1) 39%, rgba(146,9,170,1) 100%);
 }
 
 .component-button.selected button {
   background: #00e1ff;
   background: linear-gradient(to right, #00e1ff 0%, #00cbe6 51%, #009eb3 100%);
+  background-position: right center;
 }
 
 .component-button.playing button {
-  background-position: right center;
+  border-color: white;
+  border-width: 3px;
+}
+
+.component-button.selected.playing button {
+  border-color: white;
+  border-width: 3px;
 }
 
 .component-button button:active, .component-button button:focus {

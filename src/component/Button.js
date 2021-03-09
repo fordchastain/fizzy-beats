@@ -7,27 +7,29 @@ export default class Button extends React.Component {
     row: PropTypes.number,
     col: PropTypes.number,
     handleClick: PropTypes.func,
+    playing: PropTypes.bool,
+    currentBeat: PropTypes.number,
+    sampleBtn: PropTypes.bool
   };
 
   state = {
-    selected: false,
-    playing: false
+    selected: false
   };
 
   handleClick = () => {
-    if (this.props.col!=0) {
+    if (!this.props.sampleBtn) {
       this.setState({selected: !this.state.selected});
     }
 
-    this.props.handleClick(this.props.row, this.props.col, !this.state.selected);
+    this.props.handleClick(this.props.row, this.props.col, this.props.sampleBtn);
   };
 
   render() {
     const className = [
       "component-button",
-      this.props.col==0 ? "sequence" : "",
+      this.props.sampleBtn ? "sample" : "",
       this.state.selected ? "selected" : "",
-      this.state.playing ? "playing " : ""
+      this.props.playing && this.props.col === this.props.currentBeat ? "playing " : ""
     ];
 
     return (
