@@ -3,12 +3,30 @@
 		{
 			"name": "808-01",
 			"samples": [
-				"audio/808/808-kick-01.wav",
-				"audio/808/808-snare-01.wav",
-				"audio/808/808-clap-01.wav",
-				"audio/808/808-hat-01.wav",
-				"audio/808/808-cymbal-01.wav",
-				"audio/808/808-clave-01.wav"
+        {
+          "name": "kick",
+          "url": "audio/808/808-kick-01.wav"
+        },
+        {
+          "name": "snare",
+          "url": "audio/808/808-snare-01.wav"
+        },
+        {
+          "name": "clap",
+          "url": "audio/808/808-clap-01.wav"
+        },
+				{
+          "name": "hat",
+          "url": "audio/808/808-hat-01.wav"
+        },
+				{
+          "name": "cymbal",
+          "url": "audio/808/808-cymbal-01.wav"
+        },
+        {
+          "name": "clave",
+          "url": "audio/808/808-clave-01.wav"
+        }
 			]
 		}
 	]

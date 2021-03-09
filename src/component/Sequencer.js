@@ -14,6 +14,7 @@ export default class Sequencer extends React.Component {
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.lookAhead = 25.0;
     this.scheduleAheadTime = 0.1;
+    this.timerID = null;
 
     this.state = {
       pads: [
@@ -29,14 +30,15 @@ export default class Sequencer extends React.Component {
       currentBeat: 0,
       nextBeatTime: 0.0,
       bpm: 120, 
-      isPlaying: false
+      isPlaying: false,
+      lastNoteDrawn: 7
     }
   }
 
   componentDidMount() {
-    let sampleUrls = presets.drumKits[0].samples;
-    for (var i = 0; i < sampleUrls.length; i++) {
-      this.setupSample(sampleUrls[i]).then((sample) => {
+    let samples = presets.drumKits[0].samples;
+    for (var i = 0; i < samples.length; i++) {
+      this.setupSample(samples[i].url).then((sample) => {
         this.setState({samples: [...this.state.samples, sample]});
         console.log("sample loaded successfully");
       });
@@ -76,7 +78,40 @@ export default class Sequencer extends React.Component {
   scheduleBeat = (beatNumber, time) => {
     this.setState({ queue: [...this.state.queue, {beat: beatNumber, time: time}] });
 
+    for (var i = 0; i < this.state.pads.length; i++) {
+      if (this.state.pads[i][beatNumber]) {
+        this.playSample(this.state.samples[i], time);
+      }
+    }
+  }
 
+  scheduler = () => {
+    while (this.state.nextBeatTime < this.audioContext.currentTime + this.scheduleAheadTime) {
+      this.scheduleBeat(this.state.currentBeat, this.state.nextBeatTime);
+      this.nextBeat();
+    }
+
+    this.timerID = window.setTimeout(this.scheduler, this.lookahead);
+  }
+
+  draw = () => {
+    let drawNote = this.state.lastNoteDrawn;
+    const currentTime = this.audioContext.currentTime;
+
+    while (this.state.queue.length && this.state.queue[0].time < currentTime) {
+      drawNote = this.state.queue[0].beat;
+      var queueCopy = [...this.state.queue];
+      queueCopy.splice(0, 1);
+      this.setState({queue: queueCopy});
+    }
+
+    if (this.state.lastNoteDrawn !== drawNote) {
+      /* TODO: update sequence button colors */
+    }
+
+    this.setState({lastNoteDrawn: drawNote});
+
+    requestAnimationFrame(this.draw);
   }
 
   togglePad = (row, col) => {
@@ -95,6 +130,7 @@ export default class Sequencer extends React.Component {
 
   handleInput = (value) => {
     console.log("bpm changed to " + value);
+    console.log(this.state.pads);
   }
 
   sequenceButtonHandler = (row, col) => {
@@ -111,13 +147,29 @@ export default class Sequencer extends React.Component {
     }
   }
 
+  playButtonHandler = () => {
+    
+    this.setState({isPlaying: !this.state.isPlaying}, () => {
+      if (this.state.isPlaying) {
+        this.setState({currentBeat: 0});
+        this.setState({nextBeatTime: this.audioContext.currentTime});
+        this.scheduler();
+        requestAnimationFrame(this.draw);
+      }
+      else {
+        window.clearTimeout(this.timerID);
+      }
+    });
+    
+  }
+
   render() {
     return (
       <div className="component-app">
         <div className="content-wrapper">
           <div className="display-wrapper">
             <NumStepper inputHandler={this.handleInput} />
-            <input type="image" src={powerIcon} className="on-button" />
+            <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
           </div>
           <ButtonPanel clickHandler={this.sequenceButtonHandler} />
         </div>
