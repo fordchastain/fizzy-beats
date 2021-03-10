@@ -26,6 +26,7 @@ input[type=number]
   font-weight: bold;
   background: transparent;
   color: white;
+  caret-color: transparent;
 }
 
 .component-num-stepper label {

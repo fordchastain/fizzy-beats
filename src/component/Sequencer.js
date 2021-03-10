@@ -96,7 +96,7 @@ export default class Sequencer extends React.Component {
   }
 
   start() {
-    if (this.audioContext === 'suspended') {
+    if (this.audioContext.state == 'suspended') {
       this.audioContext.resume();
     }
 
@@ -128,15 +128,15 @@ export default class Sequencer extends React.Component {
     requestAnimationFrame(this.draw);
   }
 
-  handleInput = (value) => {
-    console.log("bpm changed to " + value);
-    this.setState({bpm: value});
+  handleBPMChange = (value) => {
+    if (value >= 40 && value <= 240) {
+      this.setState({bpm: value});
+    }
   }
 
   sequenceButtonHandler = (row, col, sampleBtn) => {
     if (sampleBtn) {
       this.playSample(this.state.samples[row].sample, 0);
-      console.log(this.state.samples);
     }
     else {
       console.log("sequence button at row " + row + " col pushed");
@@ -193,7 +193,7 @@ export default class Sequencer extends React.Component {
       <div className="component-app">
         <div className="content-wrapper">
           <div className="display-wrapper">
-            <NumStepper label={"BPM:"} min={40} max={240} inputHandler={this.handleInput} defaultVal={100}/>
+            <NumStepper value={"" + this.state.bpm} label={"BPM:"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
             <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
             <div className="bars-wrapper">
             </div>
