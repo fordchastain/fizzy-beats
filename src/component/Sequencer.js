@@ -1,7 +1,7 @@
 import React from "react";
 import NumStepper from "./NumStepper"
 import Button from "./Button"
-import powerIcon from "./assets/power.png"
+import powerIcon from "./assets/power.svg"
 import presets from "./presets.json"
 import "./Sequencer.css";
 

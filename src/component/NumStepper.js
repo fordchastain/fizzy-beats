@@ -19,9 +19,11 @@ export default class Button extends React.Component {
   render() {
     return (
       <div className="component-num-stepper">
-        <label>{this.props.label}</label>
-        <input type="number" id="bpm" name="bpm" min={this.props.min}
-          max={this.props.max} value={this.props.value} onChange={this.handleChange} />
+        <div className="input-wrapper">
+          <label>{this.props.label}</label>
+          <input type="number" id="bpm" name="bpm" min={this.props.min}
+            max={this.props.max} value={this.props.value} onChange={this.handleChange} />
+        </div>
       </div>
     );
   }
