@@ -15,7 +15,7 @@ input[type=number]
 }
 
 .component-num-stepper input {
-  width: 42px;
+  width: 52px;
   height: 32px;
   line-height: 1.65;
   padding: 0;

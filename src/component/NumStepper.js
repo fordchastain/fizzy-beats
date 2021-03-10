@@ -7,9 +7,11 @@ export default class Button extends React.Component {
     min: PropTypes.number,
     max: PropTypes.number,
     inputHandler: PropTypes.func,
+    label: PropTypes.string,
+    defaultVal: PropTypes.number
   };
 
-  state = {value: 120};
+  state = {value: this.props.defaultVal};
 
   handleInput = (event) => {
     this.props.inputHandler(event.target.value);
@@ -19,7 +21,7 @@ export default class Button extends React.Component {
   render() {
     return (
       <div className="component-num-stepper">
-        <label>BPM:</label>
+        <label>{this.props.label}</label>
         <input type="number" id="bpm" name="bpm" min={this.props.min} 
           max={this.props.max} value={this.state.value} onInput={this.handleInput} />
       </div>

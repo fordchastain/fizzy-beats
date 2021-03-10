@@ -11,35 +11,36 @@ export default class Sequencer extends React.Component {
     super(props);
 
     this.pads = [
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0]
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
+    //this.samples = [];
     this.queue = [];
-    this.samples = [];
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.lookAhead = 25.0;
     this.scheduleAheadTime = 0.1;
     this.timerID = null;
     this.currentBeat = 0;
     this.nextBeatTime = 0.0;
-    this.lastBeatDrawn = 7;
+    this.lastBeatDrawn = 15;
 
     this.state = {
-      bpm: 120,
+      bpm: 100,
       isPlaying: false,
-      drawBeat: 0
+      drawBeat: 0,
+      samples: []
     }
   }
 
   componentDidMount() {
     let samples = presets.drumKits[0].samples;
     for (var i = 0; i < samples.length; i++) {
-      this.setupSample(samples[i].url).then((sample) => {
-        this.samples.push(sample);
+      this.setupSample(samples[i]).then((sample) => {
+        this.setState({samples: [...this.state.samples, {sample: sample.sample, name: sample.name}] });
         console.log("sample loaded successfully");
       });
     }
@@ -52,9 +53,9 @@ export default class Sequencer extends React.Component {
     return audioBuffer;
   }
 
-  setupSample = async (url) => {
-    const sample = await this.getFile(url);
-    return sample;
+  setupSample = async (src) => {
+    const sample = await this.getFile(src.url);
+    return {sample: sample, name: src.name};
   }
 
   playSample = (audioBuffer, time) => {
@@ -70,7 +71,7 @@ export default class Sequencer extends React.Component {
     this.nextBeatTime += secondsPerBeat;
 
     this.currentBeat++;
-    if (this.currentBeat === 8) {
+    if (this.currentBeat === 16) {
       this.currentBeat = 0;
     }
   }
@@ -80,7 +81,7 @@ export default class Sequencer extends React.Component {
 
     for (var i = 0; i < this.pads.length; i++) {
       if (this.pads[i][beatNumber]) {
-        this.playSample(this.samples[i], time);
+        this.playSample(this.state.samples[i].sample, time);
       }
     }
   }
@@ -134,11 +135,12 @@ export default class Sequencer extends React.Component {
 
   sequenceButtonHandler = (row, col, sampleBtn) => {
     if (sampleBtn) {
-      this.playSample(this.samples[row], 0);
+      this.playSample(this.state.samples[row].sample, 0);
+      console.log(this.state.samples);
     }
     else {
       console.log("sequence button at row " + row + " col pushed");
-      var temp = this.pads[row][col]; // use col-1 since first button isn't a sequence button
+      var temp = this.pads[row][col];
       this.pads[row][col] = (temp === 0 ? 1 : 0);
     }
   }
@@ -154,81 +156,50 @@ export default class Sequencer extends React.Component {
     });
   }
 
+  renderButton(row, col){
+    if (!col) {
+      return(<Button 
+        handleClick={this.sequenceButtonHandler} 
+        row={row}
+        text={typeof this.state.samples[row] === 'undefined' ? "" : this.state.samples[row].name} 
+        sampleBtn />
+      );
+    } else {
+      return (<Button 
+        handleClick={this.sequenceButtonHandler} 
+        row={row} 
+        col={col-1} 
+        playing={this.state.isPlaying} 
+        currentBeat={this.state.drawBeat}/>
+      );
+    }
+  }
+
+  renderRow(row) {
+    const cols = [];
+    for (var i = 0; i < 17; i++) {
+      cols.push(this.renderButton(row, i));
+    }
+    return (<div>{cols}</div>);
+  }
+
   render() {
+    const rows = [];
+    for (var i = 0; i < 6; i++) {
+      rows.push(this.renderRow(i));
+    }
+
     return (
       <div className="component-app">
         <div className="content-wrapper">
           <div className="display-wrapper">
-            <NumStepper inputHandler={this.handleInput} />
+            <NumStepper label={"BPM:"} min={40} max={240} inputHandler={this.handleInput} defaultVal={100}/>
             <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
+            <div className="bars-wrapper">
+            </div>
           </div>
           <div className="button-panel">
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={0} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={0} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={1} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={1} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={2} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={2} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={3} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={3} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={4} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={4} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
-            <div>
-              <Button handleClick={this.sequenceButtonHandler} row={5} sampleBtn/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={0} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={1} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={2} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={3} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={4} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={5} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={6} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-              <Button handleClick={this.sequenceButtonHandler} row={5} col={7} playing={this.state.isPlaying} currentBeat={this.state.drawBeat}/>
-            </div>
+            {rows}
           </div>
         </div>
       </div>

@@ -9,7 +9,8 @@ export default class Button extends React.Component {
     handleClick: PropTypes.func,
     playing: PropTypes.bool,
     currentBeat: PropTypes.number,
-    sampleBtn: PropTypes.bool
+    sampleBtn: PropTypes.bool,
+    text: PropTypes.string
   };
 
   state = {
@@ -34,7 +35,7 @@ export default class Button extends React.Component {
 
     return (
       <div className={className.join(" ").trim()}>
-        <button onClick={this.handleClick}></button>
+        <button onClick={this.handleClick}>{this.props.text}</button>
       </div>
     );
   }
