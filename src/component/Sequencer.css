@@ -15,7 +15,7 @@
 }
 
 .content-wrapper {
-  width: 92%;
+  width: 96%;
   margin: 0 auto;
   padding-top: 30px;
 }
@@ -46,7 +46,23 @@
 
 .button-panel > div {
   display: grid;
-  grid-template-columns: 100px repeat(4, 44px 44px 44px 52px);
+  grid-template-columns: 140px repeat(4, 44px 44px 44px 52px);
   grid-auto-rows: 55px;
+}
+
+.sampleBtn-container {
+  height: 50px;
+  width: 120px;
+  border-radius: 8px;
+  box-shadow: 0 0 6px gray;
+  background: rgb(1,1,1);
+  background: linear-gradient(135deg, rgba(1,1,1,1) 0%, rgba(28,28,28,1) 40%, rgba(38,38,38,1) 58%, rgba(79,79,79,1) 100%);
+}
+
+.sampleBtn-container label {
+  color: #eee;
+  padding-top: 14px;
+  padding-left: 10px;
+  font-size: 12px;
 }
 

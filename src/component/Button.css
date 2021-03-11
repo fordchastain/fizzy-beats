@@ -23,18 +23,26 @@
 }
 
 .component-button.sample {
-  padding: 1px;
-  width: 50px;
-  height: 50px;
+  padding: 8px 1px 1px 1px;
+  width: 42px;
+  height: 42px;
+  float: right;
 }
 
 .component-button.sample button {
-  background: rgb(45,52,54);
-  background: radial-gradient(circle, rgba(45,52,54,1) 0%, rgba(0,0,0,0.5760679271708684) 74%);
-  width: 74px;
-  border-radius: 15px;
-  border: 1px solid #eee;
-  box-shadow: 0 0 8px #eee;
+  background: rgb(179,169,169);
+  background: linear-gradient(90deg, rgba(179,169,169,1) 0%, rgba(213,205,205,1) 74%);
+  background-size: 200% auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  box-shadow: 0 0 1px gray;
+}
+
+.component-button.sample button:active {
+  background: rgb(103,103,103);
+  background: linear-gradient(90deg, rgba(103,103,103,1) 0%, rgba(181,179,179,1) 74%);
+  background-size: 200% auto;
 }
 
 .component-button.selected button {

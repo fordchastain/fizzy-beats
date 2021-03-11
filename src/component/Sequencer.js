@@ -164,11 +164,17 @@ export default class Sequencer extends React.Component {
 
   renderButton(row, col){
     if (!col) {
-      return(<Button 
+      return(<div 
+        className="sampleBtn-container">
+        <label 
+        className="sampleBtn-label">
+        {typeof this.state.samples[row] === 'undefined' ? "" : this.state.samples[row].name}
+        </label>
+        <Button 
         handleClick={this.sequenceButtonHandler} 
         row={row}
-        text={typeof this.state.samples[row] === 'undefined' ? "" : this.state.samples[row].name} 
         sampleBtn />
+        </div>
       );
     } else {
       return (<Button 
@@ -202,7 +208,7 @@ export default class Sequencer extends React.Component {
             <NumStepper value={"" + this.state.bpm} label={"BPM"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
             <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
             <div>
-              <ButtonGroup labelText={"patterns"} selected={this.state.currentPattern} buttons={4} handleClick={this.buttonGroupHandler}/>
+              <ButtonGroup labelText={"patterns"} selected={this.state.currentPattern} buttons={8} handleClick={this.buttonGroupHandler}/>
             </div>
           </div>
           <div className="button-panel">
