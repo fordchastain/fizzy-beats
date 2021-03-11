@@ -2,6 +2,8 @@ import React from "react";
 import NumStepper from "./NumStepper";
 import Button from "./Button";
 import ButtonGroup from "./ButtonGroup";
+import playIcon from "./assets/play.svg";
+import stopIcon from "./assets/stop.svg";
 import powerIcon from "./assets/power.svg";
 import presets from "./presets.json";
 import "./Sequencer.css";
@@ -19,7 +21,6 @@ export default class Sequencer extends React.Component {
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
       [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
-    //this.samples = [];
     this.queue = [];
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.lookAhead = 25.0;
@@ -46,7 +47,11 @@ export default class Sequencer extends React.Component {
         console.log("sample loaded successfully");
       });
     }
+
+    console.log(playIcon);
   }
+
+  /* web audio functions */
 
   getFile = async (fp) => {
     const response = await fetch(fp);
@@ -97,7 +102,7 @@ export default class Sequencer extends React.Component {
     this.timerID = window.setTimeout(this.scheduler, this.lookAhead);
   }
 
-  start() {
+  start = () => {
     if (this.audioContext.state == 'suspended') {
       this.audioContext.resume();
     }
@@ -108,9 +113,11 @@ export default class Sequencer extends React.Component {
     requestAnimationFrame(this.draw);
   }
 
-  stop() {
+  stop = () => {
     window.clearTimeout(this.timerID);
   }
+
+  /* animation functions */
 
   draw = () => {
     let drawBeat = this.lastBeatDrawn;
@@ -130,6 +137,8 @@ export default class Sequencer extends React.Component {
     requestAnimationFrame(this.draw);
   }
 
+  /* event handlers */
+
   handleBPMChange = (value) => {
     if (value >= 40 && value <= 240) {
       this.setState({bpm: value});
@@ -139,8 +148,7 @@ export default class Sequencer extends React.Component {
   sequenceButtonHandler = (row, col, sampleBtn) => {
     if (sampleBtn) {
       this.playSample(this.state.samples[row].sample, 0);
-    }
-    else {
+    } else {
       console.log("sequence button at row " + row + " col pushed");
       var temp = this.pads[row][col];
       this.pads[row][col] = (temp === 0 ? 1 : 0);
@@ -151,8 +159,7 @@ export default class Sequencer extends React.Component {
     this.setState({isPlaying: !this.state.isPlaying}, () => {
       if (this.state.isPlaying) {
         this.start();
-      }
-      else {
+      } else {
         this.stop();
       }
     });
@@ -162,23 +169,21 @@ export default class Sequencer extends React.Component {
     this.setState({currentPattern: pattern-1});
   }
 
+  /* render functions */
+
   renderButton(row, col){
     if (!col) {
-      return(<div 
-        className="sampleBtn-container">
-        <label 
-        className="sampleBtn-label">
+      return(<div className="sampleBtn-container">
+        <label className="sampleBtn-label">
         {typeof this.state.samples[row] === 'undefined' ? "" : this.state.samples[row].name}
         </label>
-        <Button 
-        handleClick={this.sequenceButtonHandler} 
+        <Button handleClick={this.sequenceButtonHandler} 
         row={row}
         sampleBtn />
         </div>
       );
     } else {
-      return (<Button 
-        handleClick={this.sequenceButtonHandler} 
+      return (<Button handleClick={this.sequenceButtonHandler} 
         row={row} 
         col={col-1} 
         playing={this.state.isPlaying} 
@@ -206,7 +211,11 @@ export default class Sequencer extends React.Component {
         <div className="content-wrapper">
           <div className="display-wrapper">
             <NumStepper value={"" + this.state.bpm} label={"BPM"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
-            <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
+              <button className={"on-button" + (this.state.isPlaying ? " playing" : "")} onClick={this.playButtonHandler}>
+                <span>{(this.state.isPlaying ? "Stop" : "Play")}</span>
+                <img src={playIcon} width="12" height="12" className={"play-icon" + (this.state.isPlaying ? " playing" : "")} />
+                <img src={stopIcon} width="12" height="12" className={"stop-icon" + (this.state.isPlaying ? " playing" : "")} />
+              </button>
             <div>
               <ButtonGroup labelText={"patterns"} selected={this.state.currentPattern} buttons={8} handleClick={this.buttonGroupHandler}/>
             </div>

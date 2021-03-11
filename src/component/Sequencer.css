@@ -1,6 +1,6 @@
 .component-app {
-  width: 900px;
-  height: 500px;
+  width: 920px;
+  height: 480px;
   background-color: #000000;
   background-image: linear-gradient(147deg, #000000 0%, #2c3e50 74%);
   box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
@@ -15,33 +15,72 @@
 }
 
 .content-wrapper {
-  width: 96%;
+  width: 94%;
   margin: 0 auto;
   padding-top: 30px;
 }
 
 .display-wrapper {
-	margin-bottom: 40px;
-	display: grid;
-	grid-template-columns: repeat(3, 33.33%);
+  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: repeat(3, 33.33%);
 }
 
 .on-button {
-  margin: 0 auto;
-  margin-top: 4px;
+  color: #ffffff;
+  background-color: #00ff7c;
+  border: 1px solid #00ff7c;
+  border-radius: 5px;
+  box-shadow: 0px 5px 0px #00823F;
+  position: relative;
+  top: 0px;
+  transition: all ease 0.3s;
   outline: none;
-  width: 44px;
-  height: 44px;
-  border: 2px solid #eee;
-  border-radius: 22px;
-  padding: 6px;
-  box-shadow: 0 0 4px white;
+  width: 100px;
+  height: 32px;
+  margin: 0 auto;
+  font-weight: bold;
+}
+
+.on-button img {
+  margin-left: 4px;
+  margin-bottom: 4px;
+}
+
+.play-icon {
+  display: inline;
+}
+
+.play-icon.playing {
+  display: none;
+}
+
+.stop-icon {
+  display: none;
+}
+
+.stop-icon.playing {
+  display: inline;
+}
+
+.on-button span {
+
+}
+
+.on-button.playing {
+  background-color: #ff6666;
+  border: 1px solid #ff6666;
+  box-shadow: 0px 5px 0px #b34d4d;
 }
 
 .on-button:active {
-  margin-top: 5px;
-  width: 43px;
-  height: 43px;
+  box-shadow: 0 3px 0 #00823F;
+  top: 3px;
+}
+
+.on-button.playing:active {
+  box-shadow: 0 3px 0 #b34d4d;
+  top: 3px;
 }
 
 .button-panel > div {

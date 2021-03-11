@@ -1,8 +1,8 @@
 {
-	"drumKits": [
-		{
-			"name": "808-01",
-			"samples": [
+  "drumKits": [
+    {
+      "name": "808-01",
+      "samples": [
         {
           "name": "kick",
           "url": "audio/808/808-kick-01.wav"
@@ -15,11 +15,11 @@
           "name": "clap",
           "url": "audio/808/808-clap-01.wav"
         },
-				{
+        {
           "name": "hat",
           "url": "audio/808/808-hat-01.wav"
         },
-				{
+        {
           "name": "cymbal",
           "url": "audio/808/808-cymbal-01.wav"
         },
@@ -27,7 +27,7 @@
           "name": "clave",
           "url": "audio/808/808-clave-01.wav"
         }
-			]
-		}
-	]
+      ]
+    }
+  ]
 }
