@@ -1,8 +1,9 @@
 import React from "react";
-import NumStepper from "./NumStepper"
-import Button from "./Button"
-import powerIcon from "./assets/power.svg"
-import presets from "./presets.json"
+import NumStepper from "./NumStepper";
+import Button from "./Button";
+import ButtonGroup from "./ButtonGroup";
+import powerIcon from "./assets/power.svg";
+import presets from "./presets.json";
 import "./Sequencer.css";
 
 
@@ -32,7 +33,8 @@ export default class Sequencer extends React.Component {
       bpm: 100,
       isPlaying: false,
       drawBeat: 0,
-      samples: []
+      samples: [],
+      currentPattern: 0
     }
   }
 
@@ -156,6 +158,10 @@ export default class Sequencer extends React.Component {
     });
   }
 
+  buttonGroupHandler = (pattern) => {
+    this.setState({currentPattern: pattern-1});
+  }
+
   renderButton(row, col){
     if (!col) {
       return(<Button 
@@ -193,9 +199,10 @@ export default class Sequencer extends React.Component {
       <div className="component-app">
         <div className="content-wrapper">
           <div className="display-wrapper">
-            <NumStepper value={"" + this.state.bpm} label={"BPM:"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
+            <NumStepper value={"" + this.state.bpm} label={"BPM"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
             <input type="image" src={powerIcon} className="on-button" onClick={this.playButtonHandler}/>
-            <div className="bars-wrapper">
+            <div>
+              <ButtonGroup labelText={"patterns"} selected={this.state.currentPattern} buttons={4} handleClick={this.buttonGroupHandler}/>
             </div>
           </div>
           <div className="button-panel">

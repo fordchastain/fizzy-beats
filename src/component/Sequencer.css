@@ -39,9 +39,9 @@
 }
 
 .on-button:active {
-  margin-top: 6px;
-  width: 42px;
-  height: 42px;
+  margin-top: 5px;
+  width: 43px;
+  height: 43px;
 }
 
 .button-panel > div {

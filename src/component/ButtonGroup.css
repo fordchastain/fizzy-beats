@@ -1,0 +1,49 @@
+.component-button-group {
+  border: 2px solid #eee;
+  border-radius: 4px;
+  height: 45px;
+  padding: 4px;
+  width: fit-content;
+  margin: 0 auto;
+}
+
+.component-button-group label {
+  font-weight: bold;
+  padding-right: 4px;
+  font-size: 9px;
+  color: #eee;
+  position: absolute;
+  margin-top: -12px;
+  margin-left: 8px;
+  background-color: #161e26;
+  padding-left: 4px;
+}
+
+.divider {
+  width: 3px;
+  height: auto;
+  display: inline-block;
+}
+
+.buttons {
+  padding-top: 6px;
+  padding-left: 1px;
+}
+
+.group-button {
+  border: 0;
+  outline: none;
+  background-image: linear-gradient(to right, #ff75f4 0%, #c800f0 51%, #5d24b2 100%);
+  background-size: 150% auto;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+  height: 20px;
+  width: 20px;
+  border-radius: 2px;
+}
+
+.group-button.selected {
+  background: #00e1ff;
+  background: linear-gradient(to right, #00e1ff 0%, #00cbe6 51%, #009eb3 100%);
+}

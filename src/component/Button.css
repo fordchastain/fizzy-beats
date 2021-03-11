@@ -8,9 +8,9 @@
 
 .component-button button {
   box-shadow: 0 2px 4px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.24);
-  box-shadow: 0 0 10px #eee;
+  box-shadow: 0 0 8px #ff75f4;
   border-radius: 20px;
-  border-color: #ffc9fb;
+  border: none;
   transition: all 0.3s cubic-bezier(.25,.8,.25,1);
   border-width: 2px;
   background-image: linear-gradient(to right, #ff75f4 0%, #c800f0 51%, #5d24b2 100%);
@@ -33,14 +33,16 @@
   background: radial-gradient(circle, rgba(45,52,54,1) 0%, rgba(0,0,0,0.5760679271708684) 74%);
   width: 74px;
   border-radius: 15px;
-  border-color: white;
+  border: 1px solid #eee;
+  box-shadow: 0 0 8px #eee;
 }
 
 .component-button.selected button {
   background: #00e1ff;
   background: linear-gradient(to right, #00e1ff 0%, #00cbe6 51%, #009eb3 100%);
   background-position: right center;
-  border-color: #c9fffe;
+  border: none;
+  box-shadow: 0 0 8px #00e1ff;
 }
 
 .component-button.selected.playing, .component-button.playing  {
@@ -51,16 +53,8 @@
   padding-right: 3px;
 }
 
-.component-button.playing button {
-  border-color: white;
-  border-width: 4px;
-  box-shadow: 0 0 16px #eee;
-}
-
-.component-button.selected.playing button {
-  border-color: white;
-  border-width: 3px;
-  box-shadow: 0 0 16px #eee;
+.component-button.playing button, .component-button.selected.playing button {
+  box-shadow: 0 0 12px #eee;
 }
 
 .component-button button:active {
