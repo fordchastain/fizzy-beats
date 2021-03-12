@@ -26,6 +26,11 @@
   grid-template-columns: repeat(3, 33.33%);
 }
 
+.first-col-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
 .on-button {
   color: #ffffff;
   background-color: #00ff7c;
@@ -40,6 +45,7 @@
   height: 32px;
   margin: 0 auto;
   font-weight: bold;
+  margin-top: 4px;
 }
 
 .on-button img {

@@ -2,6 +2,7 @@ import React from "react";
 import NumStepper from "./NumStepper";
 import Button from "./Button";
 import ButtonGroup from "./ButtonGroup";
+import DropdownMenu from "./DropdownMenu";
 import playIcon from "./assets/play.svg";
 import stopIcon from "./assets/stop.svg";
 import powerIcon from "./assets/power.svg";
@@ -13,14 +14,7 @@ export default class Sequencer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.pads = [
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-      [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-    ];
+    this.pads = [];
     this.queue = [];
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.lookAhead = 25.0;
@@ -39,7 +33,19 @@ export default class Sequencer extends React.Component {
     }
   }
 
+  initializePads(arr) {
+    for (let i = 0; i < 6; i++) {
+      let temp = [];
+      for (let j = 0; j < 16; j++) {
+        temp.push(0);
+      }
+      arr.push(temp);
+    }
+  }
+
   componentDidMount() {
+    this.initializePads(this.pads);
+
     let samples = presets.drumKits[0].samples;
     for (var i = 0; i < samples.length; i++) {
       this.setupSample(samples[i]).then((sample) => {
@@ -206,16 +212,24 @@ export default class Sequencer extends React.Component {
       rows.push(this.renderRow(i));
     }
 
+    const drumKitNames = [];
+    for (let i = 0; i < presets.drumKits.length; i++) {
+      drumKitNames.push(presets.drumKits[i].name);
+    }
+
     return (
       <div className="component-app">
         <div className="content-wrapper">
           <div className="display-wrapper">
-            <NumStepper value={"" + this.state.bpm} label={"BPM"} min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
-              <button className={"on-button" + (this.state.isPlaying ? " playing" : "")} onClick={this.playButtonHandler}>
-                <span>{(this.state.isPlaying ? "Stop" : "Play")}</span>
-                <img src={playIcon} width="12" height="12" className={"play-icon" + (this.state.isPlaying ? " playing" : "")} />
-                <img src={stopIcon} width="12" height="12" className={"stop-icon" + (this.state.isPlaying ? " playing" : "")} />
-              </button>
+            <div className="first-col-wrapper">
+              <DropdownMenu label="drum kit" names={drumKitNames}/>
+              <NumStepper value={"" + this.state.bpm} label="BPM" min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
+            </div>
+            <button className={"on-button" + (this.state.isPlaying ? " playing" : "")} onClick={this.playButtonHandler}>
+              <span>{(this.state.isPlaying ? "Stop" : "Play")}</span>
+              <img src={playIcon} width="12" height="12" className={"play-icon" + (this.state.isPlaying ? " playing" : "")} />
+              <img src={stopIcon} width="12" height="12" className={"stop-icon" + (this.state.isPlaying ? " playing" : "")} />
+            </button>
             <div>
               <ButtonGroup labelText={"patterns"} selected={this.state.currentPattern} buttons={8} handleClick={this.buttonGroupHandler}/>
             </div>
