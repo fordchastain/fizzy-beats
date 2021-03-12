@@ -7,11 +7,12 @@ export default class DropdownMenu extends React.Component {
     names: PropTypes.array,
     value: PropTypes.string,
     label: PropTypes.string,
-
+    changeHandler: PropTypes.func
   };
 
-  handleChange = () => {
-
+  handleChange = (e) => {
+    console.log(e.target.value);
+    this.props.changeHandler(e.target.value);
   };
 
   render() {
@@ -23,7 +24,7 @@ export default class DropdownMenu extends React.Component {
     return (
       <div className="component-dropdown-menu">
         <label>{this.props.label}</label>
-        <select>
+        <select onChange={this.handleChange}>
           {options}
         </select>
       </div>

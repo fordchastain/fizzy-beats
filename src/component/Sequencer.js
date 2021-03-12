@@ -29,7 +29,27 @@ export default class Sequencer extends React.Component {
       isPlaying: false,
       drawBeat: 0,
       samples: [],
-      currentPattern: 0
+      currentPattern: 0,
+      currentDrumKit: "808"
+    }
+  }
+
+  componentDidMount() {
+    this.initializePads(this.pads);
+
+    this.loadSamples();
+  }
+
+  loadSamples() {
+    this.setState({samples: []}); // clear samples array
+
+    let index = presets.drumKits.map((drumKit) => { return drumKit.name; }).indexOf(this.state.currentDrumKit);
+
+    let samples = presets.drumKits[index].samples;
+    for (let i = 0; i < samples.length; i++) {
+      this.setupSample(samples[i]).then((sample) => {
+        this.setState({ samples: [...this.state.samples, {sample: sample.sample, name: sample.name}] });
+      });
     }
   }
 
@@ -41,20 +61,6 @@ export default class Sequencer extends React.Component {
       }
       arr.push(temp);
     }
-  }
-
-  componentDidMount() {
-    this.initializePads(this.pads);
-
-    let samples = presets.drumKits[0].samples;
-    for (var i = 0; i < samples.length; i++) {
-      this.setupSample(samples[i]).then((sample) => {
-        this.setState({samples: [...this.state.samples, {sample: sample.sample, name: sample.name}] });
-        console.log("sample loaded successfully");
-      });
-    }
-
-    console.log(playIcon);
   }
 
   /* web audio functions */
@@ -94,7 +100,8 @@ export default class Sequencer extends React.Component {
 
     for (var i = 0; i < this.pads.length; i++) {
       if (this.pads[i][beatNumber]) {
-        this.playSample(this.state.samples[i].sample, time);
+        if (typeof this.state.samples[i] != "undefined" && this.state.samples[i])
+          this.playSample(this.state.samples[i].sample, time);
       }
     }
   }
@@ -152,7 +159,7 @@ export default class Sequencer extends React.Component {
   }
 
   sequenceButtonHandler = (row, col, sampleBtn) => {
-    if (sampleBtn) {
+    if (sampleBtn && typeof this.state.samples[row] != 'undefined' && this.state.samples[row]) {
       this.playSample(this.state.samples[row].sample, 0);
     } else {
       console.log("sequence button at row " + row + " col pushed");
@@ -173,6 +180,12 @@ export default class Sequencer extends React.Component {
 
   buttonGroupHandler = (pattern) => {
     this.setState({currentPattern: pattern-1});
+  }
+
+  drumKitChangeHandler = (value) => {
+    this.setState({currentDrumKit: value}, () => {
+      this.loadSamples()
+    });
   }
 
   /* render functions */
@@ -222,7 +235,7 @@ export default class Sequencer extends React.Component {
         <div className="content-wrapper">
           <div className="display-wrapper">
             <div className="first-col-wrapper">
-              <DropdownMenu label="drum kit" names={drumKitNames}/>
+              <DropdownMenu label="drum kit" names={drumKitNames} changeHandler={this.drumKitChangeHandler}/>
               <NumStepper value={"" + this.state.bpm} label="BPM" min={40} max={240} changeHandler={this.handleBPMChange} defaultVal={100}/>
             </div>
             <button className={"on-button" + (this.state.isPlaying ? " playing" : "")} onClick={this.playButtonHandler}>
