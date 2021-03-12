@@ -1,7 +1,7 @@
 {
   "drumKits": [
     {
-      "name": "808-01",
+      "name": "808",
       "samples": [
         {
           "name": "kick",
@@ -26,6 +26,93 @@
         {
           "name": "clave",
           "url": "audio/808/808-clave-01.wav"
+        }
+      ]
+    },
+    {
+      "name": "acoustic",
+      "samples": [
+        {
+          "name": "kick",
+          "url": "audio/acoustic/acoustic-kick.wav"
+        },
+        {
+          "name": "snare",
+          "url": "audio/acoustic/acoustic-snare.wav"
+        },
+        {
+          "name": "closed hat",
+          "url": "audio/acoustic/acoustic-cl-hat.wav"
+        },
+        {
+          "name": "open hat",
+          "url": "audio/acoustic/acoustic-op-hat.wav"
+        },
+        {
+          "name": "cymbal",
+          "url": "audio/acoustic/acoustic-cymbal.wav"
+        },
+        {
+          "name": "tom",
+          "url": "audio/acoustic/acoustic-tom-0.wav"
+        }
+      ]
+    },
+    {
+      "name": "electro",
+      "samples": [
+        {
+          "name": "kick",
+          "url": "audio/electro/electro-kick.wav"
+        },
+        {
+          "name": "snare",
+          "url": "audio/electro/electro-snare.wav"
+        },
+        {
+          "name": "clap",
+          "url": "audio/electro/electro-clap.wav"
+        },
+        {
+          "name": "hat",
+          "url": "audio/electro/electro-cl-hat.wav"
+        },
+        {
+          "name": "fx",
+          "url": "audio/electro/electro-fx-2.wav"
+        },
+        {
+          "name": "tom",
+          "url": "audio/electro/electro-tom-1.wav"
+        }
+      ]
+    },
+    {
+      "name": "vinyl",
+      "samples": [
+        {
+          "name": "kick",
+          "url": "audio/vinyl/vinyl-kick.wav"
+        },
+        {
+          "name": "snare",
+          "url": "audio/vinyl/vinyl-snare.wav"
+        },
+        {
+          "name": "closed hat",
+          "url": "audio/vinyl/vinyl-cl-hat.wav"
+        },
+        {
+          "name": "open hat",
+          "url": "audio/vinyl/vinyl-op-hat.wav"
+        },
+        {
+          "name": "cymbal",
+          "url": "audio/vinyl/vinyl-cymbal.wav"
+        },
+        {
+          "name": "shaker",
+          "url": "audio/vinyl/vinyl-shaker.wav"
         }
       ]
     }
