@@ -36,13 +36,11 @@ export default class Sequencer extends React.Component {
 
   componentDidMount() {
     this.initializePads(this.pads);
-
     this.loadSamples();
   }
 
   loadSamples() {
-    this.setState({samples: []}); // clear samples array
-
+    this.setState({samples: []});
     let index = presets.drumKits.map((drumKit) => { return drumKit.name; }).indexOf(this.state.currentDrumKit);
 
     let samples = presets.drumKits[index].samples;
