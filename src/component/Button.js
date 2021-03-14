@@ -8,20 +8,13 @@ export default class Button extends React.Component {
     col: PropTypes.number,
     handleClick: PropTypes.func,
     playing: PropTypes.bool,
+    selected: PropTypes.bool,
     currentBeat: PropTypes.number,
     sampleBtn: PropTypes.bool,
     text: PropTypes.string
   };
 
-  state = {
-    selected: false
-  };
-
   handleClick = () => {
-    if (!this.props.sampleBtn) {
-      this.setState({selected: !this.state.selected});
-    }
-
     this.props.handleClick(this.props.row, this.props.col, this.props.sampleBtn);
   };
 
@@ -29,7 +22,7 @@ export default class Button extends React.Component {
     const className = [
       "component-button",
       this.props.sampleBtn ? "sample" : "",
-      this.state.selected ? "selected" : "",
+      this.props.selected ? "selected" : "",
       this.props.playing && this.props.col === this.props.currentBeat ? "playing " : ""
     ];
 

@@ -14,7 +14,7 @@ export default class Sequencer extends React.Component {
   constructor(props) {
     super(props);
 
-    this.pads = [];
+    this.patterns = [];
     this.queue = [];
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     this.lookAhead = 25.0;
@@ -30,12 +30,13 @@ export default class Sequencer extends React.Component {
       drawBeat: 0,
       samples: [],
       currentPattern: 0,
-      currentDrumKit: "808"
+      currentDrumKit: "808",
+      pads: []
     }
   }
 
   componentDidMount() {
-    this.initializePads(this.pads);
+    this.initializePatterns();
     this.loadSamples();
   }
 
@@ -46,8 +47,12 @@ export default class Sequencer extends React.Component {
     let samples = presets.drumKits[index].samples;
     for (let i = 0; i < samples.length; i++) {
       this.setupSample(samples[i]).then((sample) => {
-        this.setState({ samples: [...this.state.samples, {sample: sample.sample, name: sample.name}] });
-      });
+        let sampleItems = [...this.state.samples];
+        let sampleItem = {...sampleItems[i]};
+        sampleItem = {sample: sample.sample, name: sample.name};
+        sampleItems[i] = sampleItem;
+        this.setState({samples: sampleItems});
+      });  
     }
   }
 
@@ -59,6 +64,31 @@ export default class Sequencer extends React.Component {
       }
       arr.push(temp);
     }
+  }
+
+  initializePatterns() {
+    for (let i = 0; i < 8; i++) {
+      let temp = [];
+      this.initializePads(temp)
+      this.patterns.push(temp);
+    }
+
+    this.setState({pads: this.patterns[0]});
+  }
+
+  togglePad(row, col) {
+    this.setState({
+      pads: this.state.pads.map((r, i) => r.map((c, j) => {
+        if (i === row && j === col) {
+          this.patterns[this.state.currentPattern][i][j] = (c === 0 ? 1 : 0); // update the pattern         
+          return (c === 0 ? 1 : 0);
+        }
+        else {
+          this.patterns[this.state.currentPattern][i][j] =  c; // update the pattern
+          return c;
+        }
+      }))
+    });
   }
 
   /* web audio functions */
@@ -96,8 +126,8 @@ export default class Sequencer extends React.Component {
   scheduleBeat = (beatNumber, time) => {
     this.queue.push({beat: beatNumber, time: time});
 
-    for (var i = 0; i < this.pads.length; i++) {
-      if (this.pads[i][beatNumber]) {
+    for (var i = 0; i < this.state.pads.length; i++) {
+      if (this.state.pads[i][beatNumber]) {
         if (typeof this.state.samples[i] != "undefined" && this.state.samples[i])
           this.playSample(this.state.samples[i].sample, time);
       }
@@ -161,8 +191,8 @@ export default class Sequencer extends React.Component {
       this.playSample(this.state.samples[row].sample, 0);
     } else {
       console.log("sequence button at row " + row + " col pushed");
-      var temp = this.pads[row][col];
-      this.pads[row][col] = (temp === 0 ? 1 : 0);
+      var temp = this.state.pads[row][col];
+      this.togglePad(row, col);
     }
   }
 
@@ -177,7 +207,9 @@ export default class Sequencer extends React.Component {
   }
 
   buttonGroupHandler = (pattern) => {
-    this.setState({currentPattern: pattern-1});
+    this.setState({currentPattern: pattern-1}, () => {
+      this.setState({pads: this.patterns[this.state.currentPattern]})
+    });
   }
 
   drumKitChangeHandler = (value) => {
@@ -192,7 +224,7 @@ export default class Sequencer extends React.Component {
     if (!col) {
       return(<div className="sampleBtn-container">
         <label className="sampleBtn-label">
-        {typeof this.state.samples[row] === 'undefined' ? "" : this.state.samples[row].name}
+        {typeof this.state.samples[row] === 'undefined' ||  !this.state.samples[row] ? "" : this.state.samples[row].name}
         </label>
         <Button handleClick={this.sequenceButtonHandler} 
         row={row}
@@ -204,7 +236,8 @@ export default class Sequencer extends React.Component {
         row={row} 
         col={col-1} 
         playing={this.state.isPlaying} 
-        currentBeat={this.state.drawBeat}/>
+        selected={typeof this.state.pads[row] === 'undefined' ? false : this.state.pads[row][col-1] === 1}
+        currentBeat={this.state.drawBeat} />
       );
     }
   }
