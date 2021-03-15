@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/fizzy-beats/static/css/main.90a6f084.chunk.css",
+    "main.js": "/fizzy-beats/static/js/main.2e82149c.chunk.js",
+    "main.js.map": "/fizzy-beats/static/js/main.2e82149c.chunk.js.map",
+    "runtime-main.js": "/fizzy-beats/static/js/runtime-main.f431b803.js",
+    "runtime-main.js.map": "/fizzy-beats/static/js/runtime-main.f431b803.js.map",
+    "static/js/2.0c657130.chunk.js": "/fizzy-beats/static/js/2.0c657130.chunk.js",
+    "static/js/2.0c657130.chunk.js.map": "/fizzy-beats/static/js/2.0c657130.chunk.js.map",
+    "index.html": "/fizzy-beats/index.html",
+    "static/css/main.90a6f084.chunk.css.map": "/fizzy-beats/static/css/main.90a6f084.chunk.css.map",
+    "static/js/2.0c657130.chunk.js.LICENSE.txt": "/fizzy-beats/static/js/2.0c657130.chunk.js.LICENSE.txt",
+    "static/media/play.46a9bdd6.svg": "/fizzy-beats/static/media/play.46a9bdd6.svg",
+    "static/media/power.52d90cb0.svg": "/fizzy-beats/static/media/power.52d90cb0.svg",
+    "static/media/stop.b7dedbb2.svg": "/fizzy-beats/static/media/stop.b7dedbb2.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f431b803.js",
+    "static/js/2.0c657130.chunk.js",
+    "static/css/main.90a6f084.chunk.css",
+    "static/js/main.2e82149c.chunk.js"
+  ]
+}
