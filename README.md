@@ -11,7 +11,7 @@ features are:
 	- Electro
 	- Vinyl
 
-![Demo](Public/demo.gif)
+![Demo](public/demo.gif)
 
 ### What next?
 
