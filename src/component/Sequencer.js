@@ -46,13 +46,15 @@ export default class Sequencer extends React.Component {
 
     let samples = presets.drumKits[index].samples;
     for (let i = 0; i < samples.length; i++) {
-      this.setupSample(samples[i]).then((sample) => {
-        let sampleItems = [...this.state.samples];
-        let sampleItem = {...sampleItems[i]};
-        sampleItem = {sample: sample.sample, name: sample.name};
-        sampleItems[i] = sampleItem;
-        this.setState({samples: sampleItems});
-      });  
+      fetch(samples[i].url).then((response) => response.arrayBuffer())
+        .then((arrayBuffer) => this.audioContext.decodeAudioData(arrayBuffer, (buffer) => {
+          let sampleItems = [...this.state.samples];
+          let sampleItem = {...sampleItems[i]};
+          sampleItem = {sample: buffer, name: samples[i].name};
+          sampleItems[i] = sampleItem;
+          this.setState({samples: sampleItems});
+        }
+      ));
     }
   }
 
@@ -92,18 +94,6 @@ export default class Sequencer extends React.Component {
   }
 
   /* web audio functions */
-
-  getFile = async (fp) => {
-    const response = await fetch(fp);
-    const arrayBuffer = await response.arrayBuffer();
-    const audioBuffer = await this.audioContext.decodeAudioData(arrayBuffer);
-    return audioBuffer;
-  }
-
-  setupSample = async (src) => {
-    const sample = await this.getFile(src.url);
-    return {sample: sample, name: src.name};
-  }
 
   playSample = (audioBuffer, time) => {
     const sampleSource = this.audioContext.createBufferSource();
